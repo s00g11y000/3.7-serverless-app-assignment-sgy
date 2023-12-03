@@ -1,0 +1,28 @@
+service: my-serverless-app
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1 
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+  s3EventHandler:
+    handler: handler.s3EventHandler
+    events:
+      - s3:
+          bucket: my-bucket
+          event: s3:ObjectCreated:*
+  scheduledEventHandler:
+    handler: handler.scheduledEventHandler
+    events:
+      - schedule: rate(1 hour)
+
+plugins:
+  - serverless-offline
